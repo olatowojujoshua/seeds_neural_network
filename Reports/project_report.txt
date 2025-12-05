@@ -1,1 +1,86 @@
+Feed-Forward Artificial Neural Network for Multiclass Classification on the UCI Seeds Dataset
 
+Advanced Data Analytics
+
+Olatowoju Joshua Oladayo
+
+7 December 2025
+
+Introduction
+This project applies a feed-forward Artificial Neural Network (ANN) to classify wheat seeds into three botanical varieties using the UCI Seeds dataset. The dataset consists of 210 samples described by seven geometric features extracted from seed images, such as area, perimeter, compactness, and kernel measurements. The objective is to design and train a multi-layer perceptron, evaluate its performance, and examine how the number of hidden-layer units affects model accuracy and generalization. Performance is assessed using accuracy, precision, recall, F1-score, and a confusion matrix.
+
+Methods
+2.1 Preprocessing and Data Preparation The dataset was loaded from the UCI repository and assigned eight column names. Exploratory Data Analysis showed:
+
+• Class distribution:
+
+• Class 1: 70 samples
+
+• Class 2: 70 samples
+
+• Class 3: 70 samples
+
+• Dataset is perfectly balanced.
+
+• Summary statistics showed moderate variation across features.
+
+• No missing values were present.
+
+The data was split into 80% training (168 samples) and 20% testing (42 samples) using a stratified approach. All features were standardized using StandardScaler, fitted on the training set only.
+
+2.2 ANN Architecture
+
+A feed-forward ANN was developed using TensorFlow/Keras. The network comprises an input layer with seven features, two dense hidden layers with ReLU activation, and dropout (0.3) applied after each hidden layer to mitigate overfitting. The output layer contains three neurons with softmax activation for multiclass probability estimation. The model was trained using sparse categorical cross-entropy loss and the Adam optimizer (learning rate = 0.001) for 50 epochs with a batch size of 16. A 20% validation split was used to monitor learning stability and generalization.
+
+2.3 Hyperparameter Variation
+
+The experiment varied one hyperparameter: number of units in the first hidden layer.
+
+• Model A (Small Network): 16 → 8 units
+
+• Model B (Large Network): 64 → 32 units
+
+All other configurations were held constant.
+
+Results
+3.1 Training and Validation Curve
+
+Observations:
+
+• The large network (64 units) converged faster and achieved high training accuracy early.
+
+• However, its validation accuracy was less stable, showing clear signs of overfitting.
+
+• The small network (16 units) improved more gradually but maintained more consistent validation performance across epochs.
+
+3.2 Test-Set Performance
+
+Table 1. Test Metrics for Both Models
+
+Model Accuracy Precision Recall F1-score
+
+Small Network (16 units) 95.24% 0.9583 0.9524 0.9521
+
+Large Network (64 units) 85.71% 0.8824 0.8571 0.8446
+
+Best Model: The Small Network (16 units) performed best on the test set. This result shows that a simpler model generalized better on limited data.
+
+3.3 Confusion Matrix (Best Model)
+
+Confusion Matrix for Small Network (16 units):
+
+Interpretation
+
+• Class 1 had 2 misclassifications into class 2.
+
+• Classes 2 and 3 were classified perfectly (100% accuracy).
+
+• No confusion occurred between classes 1 and 3 or 2 and 3.
+
+This indicates that Classes 2 and 3 have more distinct feature patterns, while Class 1 overlaps slightly with Class 2.
+
+Discussion
+The hyperparameter experiment demonstrated that increasing hidden-layer units does not always improve model performance—especially with small datasets. The large network overfit quickly, achieving high training accuracy but much lower test accuracy (85.7%). In contrast, the small network generalized significantly better, achieving 95.24% test accuracy, with strong precision and recall across classes. Suggested Improvement A key improvement would be incorporating early stopping or L2 regularization to reduce overfitting in larger models. Additionally, k-fold cross-validation could provide a more reliable estimate of model performance for small datasets.
+
+Conclusion
+A feed-forward ANN was successfully built, trained, and evaluated for multiclass seed classification. Both networks performed well, but the smaller network achieved the highest test accuracy and generalization performance. This project shows that compact neural architectures can be highly effective for structured datasets with limited samples, and that careful hyperparameter selection is essential to avoid overfitting.
